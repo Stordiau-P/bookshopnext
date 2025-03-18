@@ -21,7 +21,7 @@ const NavIcons = () => {
         setIsProfileOpen((prev) => !prev)
     }
     return (
-        <div className='flex items-center gap-4 xl:gap-6 relative'>
+        <div className='flex items-center gap-4 xl:gap-6 relative' onClick={() => setIsCartOpen((prev) => !prev)}>
             <Image src="/profile.png" alt="profile picture" width={22} height={22} className="cursor-pointer" onClick={handleProfile}/>
             {isProfileOpen && (<div className="absolute p-4 rounded-md top-12 left-0 text-sm shadow-[0_3px_10px_rgb(0,0,0,0.2)] z-20">
                 <Link href="/">Profile</Link>
@@ -29,7 +29,7 @@ const NavIcons = () => {
 
             </div>)}
             <div className="relative cursor-pointer">
-            <Image src="/cart.png" alt="cart picture" width={22} height={22} className="" onClick={() => setIsCartOpen((prev) => !prev)}/>
+            <Image src="/cart.png" alt="cart picture" width={22} height={22} className="" />
             <div className="absolute -top-3 -right-3 w-5 h-5 bg-red-500 rounded-full text-white text-sm flex items-center justify-center">2</div>
             </div>
             {isCartOpen && <CartModal/>}
