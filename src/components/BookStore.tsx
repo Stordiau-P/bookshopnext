@@ -1,22 +1,23 @@
 "use client";
 import { useEffect, useState } from "react";
+import ProductList from "./ProductList";
 
-const Filter = () => {
+const BookStore = () => {
     const [books, setBooks] = useState([]); // Tous les livres
+    const [filteredBooks, setFilteredBooks] = useState([]); // Livres filtrés
     const [genres, setGenres] = useState([]); // Liste des genres uniques
     const [selectedGenre, setSelectedGenre] = useState(""); // Genre sélectionné
-    const [filteredBooks, setFilteredBooks] = useState([]); // Livres filtrés
 
     useEffect(() => {
         fetch("https://example-data.draftbit.com/books")
             .then((response) => response.json())
             .then((data) => {
                 setBooks(data);
-                setFilteredBooks(data); // Par défaut, afficher tous les livres
+                setFilteredBooks(data); // Par défaut, affiche tout
 
                 // 🔥 Extraire tous les genres depuis la chaîne de caractères
                 const allGenres = data.flatMap((book) => book.genres?.split(", ").map((g) => g.trim()) || []);
-                const uniqueGenres = [...new Set(allGenres)]; // Supprimer les doublons
+                const uniqueGenres = [...new Set(allGenres)];
                 setGenres(uniqueGenres);
             })
             .catch((error) => console.log(error));
@@ -25,7 +26,7 @@ const Filter = () => {
     // 🔍 Filtrer les livres selon le genre sélectionné
     useEffect(() => {
         if (!selectedGenre || selectedGenre === "Genres") {
-            setFilteredBooks(books); // Si aucun genre sélectionné, afficher tout
+            setFilteredBooks(books);
         } else {
             setFilteredBooks(books.filter((book) => book.genres?.includes(selectedGenre)));
         }
@@ -33,7 +34,7 @@ const Filter = () => {
 
     return (
         <div>
-            {/* Filtres */}
+            {/* Barre de filtre */}
             <div className="mt-12 flex justify-between">
                 <div className="flex gap-6 flex-wrap">
                     <select
@@ -50,17 +51,10 @@ const Filter = () => {
                 </div>
             </div>
 
-            {/* Liste des livres filtrés */}
-            <div className="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {filteredBooks.map((book) => (
-                    <div key={book.id} className="p-4 border rounded-lg">
-                        <h3 className="font-bold">{book.title}</h3>
-                        <p className="text-sm text-gray-500">{book.genres}</p>
-                    </div>
-                ))}
-            </div>
+            {/* Liste des produits filtrés */}
+            <ProductList books={filteredBooks} />
         </div>
     );
 };
 
-export default Filter;
+export default BookStore;
